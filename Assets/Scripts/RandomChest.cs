@@ -65,6 +65,14 @@ public class RandomChest : MonoBehaviour
         ChainChestManager.canSelectChests = false;
     }
 
+    public void ChestOpened()
+    {
+        if (isActive && isSelected)
+        {
+            Debug.LogWarning("Chest finished opening");
+        }
+    }
+
     public void Deactivate()
     {
         isActive = false; 

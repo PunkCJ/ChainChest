@@ -48,16 +48,10 @@ public class ChainChestManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        SpawnChests();
+        //SpawnChests();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    void SpawnChests()
+    public void SpawnChests()
     {
         ClearChests();
 
@@ -116,6 +110,7 @@ public class ChainChestManager : MonoBehaviour
 
     public void RespositionLight(Vector3 newPos)
     {
+        selectLight.gameObject.SetActive(true);
         selectLight.transform.position = new Vector3(newPos.x, newPos.y, selectLight.transform.position.z);
     }
 

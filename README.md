@@ -12,3 +12,5 @@ Este tiene declaradas sus respectivas variables relevantes en el inspector.
 La escena principal se encuentra en la carpeta Assets/Scenes con el nombre 01_Main
 
 Espero les guste :)
+
+Hecho en Unity 2023.2.20f1

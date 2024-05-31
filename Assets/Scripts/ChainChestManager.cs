@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
@@ -27,6 +28,11 @@ public class ChainChestManager : MonoBehaviour
     [Header("Game Config")]
     public int chestsToSpawn = 3;
     public int numberOfRounds = 5;
+    int currentRound = 1;
+    [HideInInspector] public bool isLastRound = false;
+
+    int currentScore = 0;
+
     public static bool canSelectChests = true;
 
     [Header("Chest Config")]
@@ -44,17 +50,68 @@ public class ChainChestManager : MonoBehaviour
     [Header("UI")]
     public Canvas gameCanvas;
     public Light2D selectLight;
+    [Space(10)]
+    public TMP_Text roundTxt;
+    public TMP_Text scoreTxt;  
 
-    // Start is called before the first frame update
-    void Start()
+    public void StartGame()
     {
-        //SpawnChests();
+        currentRound = 1;
+        currentScore = 0;
+        SpawnChests(currentRound); ;
     }
 
-    public void SpawnChests()
+    public void AddScore(int score)
+    {
+        currentScore += score;
+        //
+        UpdateUI();
+    }
+
+    public int GetTotalScore()
+    {
+        return currentScore;
+    }
+
+    public void KillScore()
+    {
+        currentScore = 0;
+        //
+        UpdateUI();
+    }
+
+    public void QuitGame()
+    {
+        Destroy(gameObject);
+    }
+
+
+    #region Chest Spawning
+
+    public void SpawnChests(int round)
     {
         ClearChests();
+        canSelectChests = true;
 
+        switch (round)
+        {
+            case 1:
+                InternalChestSpawn();
+                break;
+            default:
+                InternalChestSpawn();
+                AssignKillChest();
+                break;
+        }
+        //
+        ChestContentObj.instance.Hide();
+        //
+        selectLight.gameObject.SetActive(false);
+        UpdateUI();
+    }
+
+    void InternalChestSpawn()
+    {
         for (int i = 0; i < chestsToSpawn; i++)
         {
             RandomChest newChest = GetChestFromPool();
@@ -64,13 +121,39 @@ public class ChainChestManager : MonoBehaviour
         }
     }
 
+    void AssignKillChest()
+    {
+        int k = Random.Range(0, rChests.Count);
+        rChests[k].MakeKillChest();
+#if UNITY_EDITOR
+        Debug.LogWarning("Chest #" + k + " is the kill chest");
+#endif
+    }
+
     void ClearChests()
     {
         for (int i = 0; i < rChests.Count; i++)
         {
             rChests[i].Deactivate();
         }
+        //
+        rChests.Clear();
     }
+
+    #endregion
+
+    #region Round Management
+
+    public void ToNextRound()
+    {
+        currentRound++;
+        SpawnChests(currentRound);
+        //
+        UpdateUI();
+        isLastRound = (currentRound == numberOfRounds);
+    }
+
+    #endregion
 
     #region Chest Pooling
 
@@ -101,7 +184,8 @@ public class ChainChestManager : MonoBehaviour
 
     public void ReturnChestToPool(RandomChest chest)
     {
-        chest.GetComponent<RectTransform>().parent = rChestsPoolParent;
+        chest.DeselectChest();
+        chest.GetComponent<RectTransform>().SetParent(rChestsPoolParent);
     }
 
     #endregion
@@ -120,6 +204,12 @@ public class ChainChestManager : MonoBehaviour
         {
             rChests[i].DeselectChest();
         }
+    }
+
+    void UpdateUI()
+    {
+        roundTxt.text = "Round: " + currentRound + "/" + numberOfRounds;
+        scoreTxt.text = "$" + currentScore;
     }
 
     #endregion

@@ -18,28 +18,20 @@ public class RandomChest : MonoBehaviour
     public List<SpriteVisual> chestVisuals = new List<SpriteVisual>();
     SpriteVisual selectedVisual = null;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void InitChest(int value)
     {
         chestValue = value;
-
-        isKillChest = (value == 0);
 
         SelectRenderer();
 
         gameObject.SetActive(true);
         isActive = true;
+    }
+
+    public void MakeKillChest()
+    {
+        isKillChest = true;
+        chestValue = 0;
     }
 
     public void SelectChest()
@@ -69,13 +61,25 @@ public class RandomChest : MonoBehaviour
     {
         if (isActive && isSelected)
         {
-            Debug.LogWarning("Chest finished opening");
+            ChestContentObj.instance.ShowContent(isKillChest,transform.position);
+            ScorePanel.instance.ShowMessageDelayed(isKillChest, chestValue);
+            //
+            if(isKillChest)
+            {
+                ChainChestManager.instance.KillScore();
+            }
+            else
+            {
+                ChainChestManager.instance.AddScore(chestValue);
+            }
         }
     }
 
     public void Deactivate()
     {
-        isActive = false; 
+        isActive = false;
+        chestValue = 0;
+        isKillChest = false;
         gameObject.SetActive(false);
         ChainChestManager.instance.ReturnChestToPool(this);
     }

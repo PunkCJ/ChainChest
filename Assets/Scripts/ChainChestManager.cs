@@ -49,6 +49,9 @@ public class ChainChestManager : MonoBehaviour
 
     [Header("UI")]
     public Canvas gameCanvas;
+    [Space(10)]
+    public float lightMoveTime = .3f;
+    public AnimationCurve lightMoveCurve;
     public Light2D selectLight;
     [Space(10)]
     public TMP_Text roundTxt;
@@ -82,6 +85,7 @@ public class ChainChestManager : MonoBehaviour
 
     public void QuitGame()
     {
+        FindFirstObjectByType<GameSpawnHelper>().BackToMenu(GetTotalScore());
         Destroy(gameObject);
     }
 
@@ -112,12 +116,39 @@ public class ChainChestManager : MonoBehaviour
 
     void InternalChestSpawn()
     {
-        for (int i = 0; i < chestsToSpawn; i++)
+        if (chestsToSpawn > 40)
         {
-            RandomChest newChest = GetChestFromPool();
-            newChest.transform.SetParent(rChestsParent);
-            newChest.InitChest(chestValues[Random.Range(0, chestValues.Count)]);
-            rChests.Add(newChest);
+            Debug.LogWarning("Max chests to spawn is 40, sorry :(");
+
+            for (int i = 0; i < 40; i++)
+            {
+                RandomChest newChest = GetChestFromPool();
+                newChest.transform.SetParent(rChestsParent);
+                newChest.InitChest(chestValues[Random.Range(0, chestValues.Count)]);
+                rChests.Add(newChest);
+            }
+        }
+        else if (chestsToSpawn < 2)
+        {
+            Debug.LogWarning("Min chests to spawn is 2, sorry :(");
+
+            for (int i = 0; i < 2; i++)
+            {
+                RandomChest newChest = GetChestFromPool();
+                newChest.transform.SetParent(rChestsParent);
+                newChest.InitChest(chestValues[Random.Range(0, chestValues.Count)]);
+                rChests.Add(newChest);
+            }
+        }
+        else
+        {
+            for (int i = 0; i < chestsToSpawn; i++)
+            {
+                RandomChest newChest = GetChestFromPool();
+                newChest.transform.SetParent(rChestsParent);
+                newChest.InitChest(chestValues[Random.Range(0, chestValues.Count)]);
+                rChests.Add(newChest);
+            }
         }
     }
 
@@ -192,10 +223,25 @@ public class ChainChestManager : MonoBehaviour
 
     #region UI
 
-    public void RespositionLight(Vector3 newPos)
+    Vector2 startLightPos = Vector2.zero;
+
+    public void RespositionLight(Vector2 newPos)
     {
         selectLight.gameObject.SetActive(true);
-        selectLight.transform.position = new Vector3(newPos.x, newPos.y, selectLight.transform.position.z);
+        startLightPos = selectLight.transform.position;
+        StartCoroutine(LerpLightPos(newPos, lightMoveTime));
+    }
+
+    IEnumerator LerpLightPos(Vector2 end, float timeToMove)
+    {
+        float t = 0;
+        while (t < 1)
+        {
+            selectLight.transform.position = Vector2.Lerp(startLightPos, end, lightMoveCurve.Evaluate(t));
+            t = t + Time.deltaTime / timeToMove;
+            yield return new WaitForEndOfFrame();
+        }
+        selectLight.transform.position = end;
     }
 
     public void DeselectAllChests()

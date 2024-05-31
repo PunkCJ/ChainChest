@@ -16,7 +16,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!224 &5564246841683670965
 RectTransform:
@@ -155,7 +155,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!224 &7825565708776067564
 RectTransform:
@@ -411,7 +411,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 0
 --- !u!224 &2825731744987527440
 RectTransform:
@@ -551,6 +551,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wooden Chest 3
       objectReference: {fileID: 0}
+    - target: {fileID: 851090497472935585, guid: 345662405dac05b48aa4e7fc9303d0e2, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 1443231352525333536, guid: 345662405dac05b48aa4e7fc9303d0e2, type: 3}
       propertyPath: m_LocalScale.x
       value: 100
@@ -666,6 +670,10 @@ PrefabInstance:
     - target: {fileID: 1067356060878440990, guid: 22ef1d3ed2f5da343874253698c4d82d, type: 3}
       propertyPath: m_Name
       value: Wooden Chest 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1067356060878440990, guid: 22ef1d3ed2f5da343874253698c4d82d, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 1534095782982852273, guid: 22ef1d3ed2f5da343874253698c4d82d, type: 3}
       propertyPath: m_SortingLayer
@@ -794,6 +802,10 @@ PrefabInstance:
     - target: {fileID: 1992217760542167569, guid: e8a965c327eaa8e40be61fcf1622c663, type: 3}
       propertyPath: m_Name
       value: Wooden Chest 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1992217760542167569, guid: e8a965c327eaa8e40be61fcf1622c663, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 8463625095504709035, guid: e8a965c327eaa8e40be61fcf1622c663, type: 3}
       propertyPath: m_LocalScale.x
